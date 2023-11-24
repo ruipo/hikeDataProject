@@ -31,6 +31,68 @@ def execute_query(connection, query):
 # Connect to healthdata database
 connection = create_db_connection('localhost', 'Rui', 'rui123chen45',
                                   'healthdata', 5432)
+
+
+# Create heartRate, walkingSpeed, runningSpeed tables
+query = """
+CREATE TABLE heart_rate (
+time TIMESTAMP NOT NULL,
+heart_rate DECIMAL(10,6) NOT NULL);
+"""
+execute_query(connection, query)
+connection.commit()
+
+query = """
+CREATE TABLE walking_speed (
+time TIMESTAMP NOT NULL,
+speed DECIMAL(10,6) NOT NULL);
+"""
+execute_query(connection, query)
+connection.commit()
+
+query = """
+CREATE TABLE running_speed (
+time TIMESTAMP NOT NULL,
+speed DECIMAL(10,6) NOT NULL);
+"""
+execute_query(connection, query)
+connection.commit()
+
+# Populate heart_rate table with csv data
+dataFile = '/Users/Rui/Documents/hikeData/Data/csv/healthStats/HeartRate.csv'
+
+print('Reading in heart rate data ...')
+data = pd.read_csv(dataFile)
+for tInd in range(0, len(data) - 1):
+    pop_heart_rate = "INSERT INTO heart_rate VALUES " + \
+                     "('" + str(data.startDate[tInd]) + "', '" \
+                     + str(data.value[tInd]) + "');"
+    execute_query(connection, pop_heart_rate)
+
+# Populate walkingSpeed table with csv data
+dataFile = '/Users/Rui/Documents/hikeData/Data/csv/healthStats/WalkingSpeed.csv'
+
+print('Reading in walking speed data ...')
+data = pd.read_csv(dataFile)
+for tInd in range(0, len(data) - 1):
+    pop_walking_speed = "INSERT INTO walking_speed VALUES " + \
+                     "('" + str(data.startDate[tInd]) + "', '" \
+                     + str(data.value[tInd]) + "');"
+    execute_query(connection, pop_walking_speed)
+
+
+# Populate runningSpeed table with csv data
+dataFile = '/Users/Rui/Documents/hikeData/Data/csv/healthStats/RunningSpeed.csv'
+
+print('Reading in running speed data ...')
+data = pd.read_csv(dataFile)
+for tInd in range(0, len(data) - 1):
+    pop_running_speed = "INSERT INTO running_speed VALUES " + \
+                     "('" + str(data.startDate[tInd]) + "', '" \
+                     + str(data.value[tInd]) + "');"
+    execute_query(connection, pop_running_speed)
+
+
 # Create workoutRoutes table
 query = """
 CREATE TABLE workout_routes (
@@ -60,5 +122,3 @@ for f in workOutFiles:
         execute_query(connection, pop_workout_routes)
     workOutID += 1
 
-# TO DO:
-# Make tables for heart rate, walking/running speed.

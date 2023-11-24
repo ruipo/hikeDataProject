@@ -135,7 +135,7 @@ class HealthDataExtractor(object):
         self.handles = {}
         self.paths = []
         for kind in self.record_types:
-            path = os.path.join('~/Documents/hikeData/Data/csv/healthStats/', '%s.csv' % abbreviate(kind))
+            path = os.path.join('/Users/Rui/Documents/hikeData/Data/csv/healthStats/', '%s.csv' % abbreviate(kind))
             f = open(path, 'w')
             f.write(','.join(FIELDS) + '\n')
             self.handles[kind] = f
@@ -178,6 +178,6 @@ class HealthDataExtractor(object):
 
 
 # Parse in xml data
-data = HealthDataExtractor('~/Documents/hikeData/Data/raw/export.xml')
+data = HealthDataExtractor('/Users/Rui/Documents/hikeData/Data/raw/export.xml')
 data.report_stats()
 data.extract()

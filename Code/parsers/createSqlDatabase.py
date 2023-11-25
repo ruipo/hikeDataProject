@@ -29,7 +29,7 @@ def execute_query(connection, query):
 
 
 # Connect to healthdata database
-connection = create_db_connection('localhost', 'Rui', 'rui123chen45',
+connection = create_db_connection('localhost', 'Rui', '**********',
                                   'healthdata', 5432)
 
 

@@ -8,6 +8,7 @@ import matplotlib.dates as mdates
 import folium
 
 sns.set_palette("deep")
+sns.set_color_codes("deep")
 sns.set_context("notebook", font_scale=1.5, rc={"lines.linewidth": 2.5})
 sns.set_style('whitegrid')
 
@@ -119,7 +120,7 @@ else:
     summary = pd.read_pickle("../Data/dataframe_summary/summary.pkl")
 
 # Analyze summary
-year = 2023
+year = 2020
 current_year_summary = summary[(summary['time'] >= np.datetime64(str(year)+"-01-01")) &
                                     (summary['time'] <= np.datetime64(str(year)+"-12-31"))]
 print("Total time spent hiking in " + str(year) + ": " + str(current_year_summary['total_time'].sum()) + '.')
@@ -151,13 +152,25 @@ monthly_summary =  pd.DataFrame(data=monthlySummaryDict)
 # Plot monthly summary
 fig, axes = plt.subplots(2,1,figsize=(10, 9))
 fig.suptitle("Monthly Summary for " + str(year))
-ax = sns.barplot(data=monthly_summary, x="month", y="distance", ax=axes[0], color="g")
+ax = sns.barplot(data=monthly_summary, x="month", y="distance", ax=axes[0], color="b")
+# Add values above bars
+for i, v in enumerate(np.round(monthly_summary['distance'],1)):
+   ax.text(i, v + 0.2, str(v), ha='center', fontsize=12)
 axes[0].set(ylabel='Distance Hiked (mi)')
 axes[0].set(xlabel='Month')
+axes[0].set_ylim([0,90])
+axes[0].set_title("Total distance hiked " + ": "
+                        + str(np.round(current_year_summary['distance'].sum(),2)) + " miles.")
 
-sns.barplot(data=monthly_summary, x="month", y="elevation_gain", ax=axes[1], color="y")
+ax = sns.barplot(data=monthly_summary, x="month", y="elevation_gain", ax=axes[1], color="y")
+# Add values above bars
+for i, v in enumerate(np.round(monthly_summary['elevation_gain'],1)):
+   ax.text(i, v + 0.2, str(v), ha='center', fontsize=12)
 axes[1].set(ylabel='Elevation Gained (ft)')
 axes[1].set(xlabel='Month')
+axes[1].set_ylim([0,11000])
+axes[1].set_title("Total elevation gained " + ": "
+                        + str(np.round(current_year_summary['elevation_gain'].sum(),1)) + " ft.")
 
 plt.tight_layout()
 plt.savefig('../Figures/monthlySummary/'+str(year)+'monthlySummary.png')

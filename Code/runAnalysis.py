@@ -16,7 +16,7 @@ reAnalyze = False
 remakePlots = False
 if reAnalyze:
     # Connect to healthdata database
-    connection = uf.create_db_connection('localhost', 'Rui', '***********',
+    connection = uf.create_db_connection('localhost', 'Rui', '**************',
                                          'healthdata', 5432)
 
     # Read data from PostgreSQL database table and load into a DataFrame instance
@@ -111,7 +111,7 @@ if reAnalyze:
 
     # Compute Summary
     summaryDict = {'time':startTimeList, 'total_time':totalTimeList,
-                   'distance':totalDistanceMi, 'elevation_gain':elevChangeList}
+                   'distance':totalDistanceList, 'elevation_gain':elevChangeList}
     summary = pd.DataFrame(data=summaryDict)
     summary.to_pickle("../Data/dataframe_summary/summary.pkl")
 
@@ -120,7 +120,7 @@ else:
     summary = pd.read_pickle("../Data/dataframe_summary/summary.pkl")
 
 # Analyze summary
-year = 2020
+year = 2023
 current_year_summary = summary[(summary['time'] >= np.datetime64(str(year)+"-01-01")) &
                                     (summary['time'] <= np.datetime64(str(year)+"-12-31"))]
 print("Total time spent hiking in " + str(year) + ": " + str(current_year_summary['total_time'].sum()) + '.')

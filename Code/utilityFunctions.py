@@ -32,6 +32,7 @@ def execute_query(connection, query):
 # Function to compute total distance travelled during a route dataframe
 def compute_total_distance_mi(route):
     totalDistanceMi = 0
+    distanceList = [0]
     route = route.reset_index(drop=True)
     for idx in np.arange(0, len(route['workout_id']) - 1):
         latStart = route['latitude'][idx]
@@ -41,5 +42,5 @@ def compute_total_distance_mi(route):
 
         dist = gpd.geodesic((latStart, lonStart), (latEnd, lonEnd)).miles
         totalDistanceMi += dist
-
-    return(np.round(totalDistanceMi,2))
+        distanceList.append(totalDistanceMi)
+    return(np.round(totalDistanceMi,2), distanceList)
